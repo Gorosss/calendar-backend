@@ -13,20 +13,18 @@ const crearUsuario = async(req, res = response ) => {
         if ( usuario ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El usuario ya existe'
+                msg: 'User already exists with that email'
             });
         }
 
         usuario = new Usuario( req.body );
     
-        // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
         usuario.password = bcrypt.hashSync( password, salt );
 
 
         await usuario.save();
 
-        // Generar JWT
         const token = await generarJWT( usuario.id, usuario.name );
     
         res.status(201).json({
@@ -40,7 +38,7 @@ const crearUsuario = async(req, res = response ) => {
         console.log(error)
         res.status(500).json({
             ok: false,
-            msg: 'Por favor hable con el administrador'
+            msg: 'Contact the administrator'
         });
     }
 }
@@ -57,21 +55,19 @@ const loginUsuario = async(req, res = response ) => {
         if ( !usuario ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El usuario no existe con ese email'
+                msg: 'User does not exist with that email'
             });
         }
 
-        // Confirmar los passwords
         const validPassword = bcrypt.compareSync( password, usuario.password );
 
         if ( !validPassword ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'Password incorrecto'
+                msg: 'Password incorrect'
             });
         }
 
-        // Generar JWT
         const token = await generarJWT( usuario.id, usuario.name );
 
         res.json({
@@ -86,7 +82,7 @@ const loginUsuario = async(req, res = response ) => {
         console.log(error);
         res.status(500).json({
             ok: false,
-            msg: 'Por favor hable con el administrador'
+            msg: 'Contact the administrator'
         });
     }
 
@@ -97,7 +93,6 @@ const revalidarToken = async (req, res = response ) => {
 
     const { uid, name } = req;
 
-    // Generar JWT
     const token = await generarJWT( uid, name );
 
     res.json({
