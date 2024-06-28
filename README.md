@@ -1,5 +1,3 @@
-# Backend MERN - Calendar
+# Calendar Backend
 
-Backend que creamos en mi curso de React: de cero a experto
-
-fernando-herrera.com
+A REST API for my calendar app uses MongoDB to create, edit, and manage users and calendar events.
